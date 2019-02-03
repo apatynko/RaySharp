@@ -161,6 +161,24 @@ namespace Raytracer.Geometry
         {
             return v - 2 * Dot(v, n) * n;
         }
+
+        public static bool Refract(Vec3 v, Vec3 n, float niOverNt, out Vec3 refracted)
+        {
+            Vec3 uv = UnitVector(v);
+            float dt = Dot(uv, n);
+            float discriminant = 1.0F - niOverNt * niOverNt * (1 - dt * dt);
+
+            if (discriminant > 0)
+            {
+                refracted = niOverNt * (uv - n * dt) - n * (float)Math.Sqrt(discriminant);
+                return true;
+            }
+            else
+            {
+                refracted = null;
+                return false;
+            }
+        }
         #endregion
     }
 }
