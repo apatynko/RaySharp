@@ -141,7 +141,7 @@ namespace Raytracer
             return new Vec3(e0, e1, e2);
         }
 
-        public Vec3 UnitVector(Vec3 v)
+        public static Vec3 UnitVector(Vec3 v)
         {
             return v / v.Length();
         }
