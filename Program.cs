@@ -4,29 +4,13 @@ using Raytracer.Materials;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Raytracer
 {
     class Program
     {
-        public static float HitSphere(Vec3 center, float radius, Ray r)
-        {
-            Vec3 oc = r.Origin() - center;
-            float a = Vec3.Dot(r.Direction(), r.Direction());
-            float b = 2.0F * Vec3.Dot(oc, r.Direction());
-            float c = Vec3.Dot(oc, oc) - radius * radius;
-            float discriminant = b * b - 4 * a * c;
-
-            if (discriminant < 0)
-            {
-                return -1.0F;
-            }
-            else
-            {
-                return (-b - (float)Math.Sqrt(discriminant)) / 2.0F * a;
-            }
-        }
-
         private static Vec3 Color(Ray r, HitableList world, int depth)
         {
             HitRecord rec = new HitRecord();
@@ -54,6 +38,45 @@ namespace Raytracer
             }
         }
 
+        public static HitableList CreateRandomScene()
+        {
+            List<Hitable> list = new List<Hitable>();
+
+            list.Add(new Sphere(new Vec3(0.0F, -1000.0F, 0.0F), 1000F, new Lambertian(new Vec3(0.5F, 0.5F, 0.5F))));
+
+            var rnd = new Random();
+            for (int a = -11; a < 11; a++)
+            {
+                for (int b = -11; b < 11; b++)
+                {
+                    float chooseMaterial = (float)rnd.NextDouble();
+                    Vec3 center = new Vec3(a + 0.9F * (float)rnd.NextDouble(), 0.2F, b + 0.9F * (float)rnd.NextDouble());
+
+                    if ((center-new Vec3(4.0F,0.2F,0.0F)).Length() > 0.9)
+                    {
+                        if (chooseMaterial < 0.8) // diffuse
+                        {
+                            list.Add(new Sphere(center, 0.2F, new Lambertian(new Vec3((float)(rnd.NextDouble() * rnd.NextDouble()), (float)(rnd.NextDouble() * rnd.NextDouble()), (float)(rnd.NextDouble() * rnd.NextDouble())))));
+                        }
+                        else if (chooseMaterial < 0.95) // metal
+                        {
+                            list.Add(new Sphere(center, 0.2F, new Metal(new Vec3(0.5F*(1.0F+(float)rnd.NextDouble()), 0.5F * (1.0F + (float)rnd.NextDouble()), 0.5F * (1.0F + (float)rnd.NextDouble())), 0.5F*(float)rnd.NextDouble())));
+                        }
+                        else // dielectric
+                        {
+                            list.Add(new Sphere(center, 0.2F, new Dielectric(1.5F)));
+                        }
+                    }
+                }
+            }
+
+            list.Add(new Sphere(new Vec3(0.0F, 1.0F, 0.0F), 1.0F, new Dielectric(1.5F)));
+            list.Add(new Sphere(new Vec3(-4.0F, 1.0F, 0.0F), 1.0F, new Lambertian(new Vec3(0.4F, 0.2F, 0.1F))));
+            list.Add(new Sphere(new Vec3(4.0F, 1.0F, 0.0F), 1.0F, new Metal(new Vec3(0.7F, 0.6F, 0.5F), 0.0F)));
+
+            return new HitableList(list);
+        }
+
         static void Main(string[] args)
         {
             string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
@@ -64,37 +87,33 @@ namespace Raytracer
 
             var outputLines = new List<string>();
 
-            var nx = 200;
-            var ny = 100;
-            var ns = 100;
+            var nx = 1200;
+            var ny = 800;
+            var ns = 10; // Antialising samples per pixel
 
             outputLines.Add("P3");          // Filetype identifier
             outputLines.Add($"{nx} {ny}");  // Image dimensions
             outputLines.Add("255");         // Max value for colors
+            
+            HitableList world = CreateRandomScene();
 
-            List<Hitable> list = new List<Hitable>();
-            float radius = (float)Math.Cos(Math.PI / 4);
-
-            list.Add(new Sphere(new Vec3(0.0F, 0.0F, -1.0F), 0.5F, new Lambertian(new Vec3(0.1F, 0.2F, 0.5F))));
-            list.Add(new Sphere(new Vec3(0.0F, -100.5F, -1.0F), 100.0F, new Lambertian(new Vec3(0.8F, 0.8F, 0.0F))));
-            list.Add(new Sphere(new Vec3(1.0F, 0.0F, -1.0F), 0.5F, new Metal(new Vec3(0.8F, 0.6F, 0.2F), 0.3F)));
-            list.Add(new Sphere(new Vec3(-1.0F, 0.0F, -1.0F), 0.5F, new Dielectric(1.5F)));
-            list.Add(new Sphere(new Vec3(-1.0F, 0.0F, -1.0F), -0.45F, new Dielectric(1.5F)));
-
-            HitableList world = new HitableList(list);
-
-            Vec3 lookfrom = new Vec3(3.0F, 3.0F, 2.0F);
-            Vec3 lookat = new Vec3(0.0F, 0.0F, -1.0F);
-            float distToFocus = (lookfrom - lookat).Length();
-            float aperture = 2.0F;
+            Vec3 lookfrom = new Vec3(13.0F, 2.0F, 3.0F);
+            Vec3 lookat = new Vec3(0.0F, 0.0F, 0.0F);
+            float distToFocus = 10.0F;
+            float aperture = 0.1F;
             Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0F, 1.0F, 0.0F), 20.0F, (float)nx / (float)ny, aperture, distToFocus);
 
-            for (int j = ny - 1; j >= 0; j--)
+            var rnd = new Random();
+
+            var lineDict = new Dictionary<int, List<string>>();
+            Parallel.For(0, ny - 1, j =>
             {
+                var lineList = new List<string>();
+
                 for (int i = 0; i < nx; i++)
                 {
                     Vec3 col = new Vec3(0.0F, 0.0F, 0.0F);
-                    var rnd = new Random();
+
                     for (int s = 0; s < ns; s++)
                     {
                         float u = (float)(i + rnd.NextDouble()) / (float)nx;
@@ -103,17 +122,54 @@ namespace Raytracer
                         Ray r = cam.GetRay(u, v);
                         col += Color(r, world, 0);
                     }
+
                     col /= (float)ns;
                     col = new Vec3((float)Math.Sqrt(col[0]), (float)Math.Sqrt(col[1]), (float)Math.Sqrt(col[2]));
                     int ir = (int)(255.9 * col[0]);
                     int ig = (int)(255.9 * col[1]);
                     int ib = (int)(255.9 * col[2]);
 
-                    outputLines.Add($"{ir} {ig} {ib}");
+                    lineList.Add($"{ir} {ig} {ib}");
                 }
+
+                lineDict.Add(j, lineList);
+            });
+
+            var keys = lineDict.Keys.ToList();
+            keys.Sort();
+            keys.Reverse();
+
+            foreach(var key in keys)
+            {
+                outputLines.AddRange(lineDict[key]);
             }
 
-            using(var writer = File.CreateText(outputFileName))
+            //for (int j = ny - 1; j >= 0; j--)
+            //{
+            //    for (int i = 0; i < nx; i++)
+            //    {
+            //        Vec3 col = new Vec3(0.0F, 0.0F, 0.0F);
+
+            //        for (int s = 0; s < ns; s++)
+            //        {
+            //            float u = (float)(i + rnd.NextDouble()) / (float)nx;
+            //            float v = (float)(j + rnd.NextDouble()) / (float)ny;
+
+            //            Ray r = cam.GetRay(u, v);
+            //            col += Color(r, world, 0);
+            //        }
+
+            //        col /= (float)ns;
+            //        col = new Vec3((float)Math.Sqrt(col[0]), (float)Math.Sqrt(col[1]), (float)Math.Sqrt(col[2]));
+            //        int ir = (int)(255.9 * col[0]);
+            //        int ig = (int)(255.9 * col[1]);
+            //        int ib = (int)(255.9 * col[2]);
+
+            //        outputLines.Add($"{ir} {ig} {ib}");
+            //    }
+            //}
+
+            using (var writer = File.CreateText(outputFileName))
             {
                 foreach (var line in outputLines)
                 {
