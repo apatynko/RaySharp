@@ -1,4 +1,4 @@
-﻿# Raytracing in a Weekend
+﻿# Raytracing in One Weekend
 
 Implementation of Peter Shirley's raytracing tutorial in C#
 
