@@ -16,7 +16,7 @@ The code after completing each chapter can be found in it's own commit.
 | 6       | Antialiasing                          | 94dd246c9a4d0bcea53758a156c88734a656e561 |
 | 7       | Diffuse Materials                     | 6e3fa53539bc61e8e108d4d0cfb9600191394ea1 |
 | 8       | Metal                                 | 5e33dac95d7e599b2952ba29958bcf3475214e41 |
-| 9       | Dielectrics                           | Pending                                  |
+| 9       | Dielectrics                           | c615d8b30665195ee6c1f8b4465e51ce2116b42c |
 | 10      | Positionable Camera                   | Pending                                  |
 | 11      | Defocus Blur                          | Pending                                  |
 | 12      | Where Next?                           | Pending                                  |
