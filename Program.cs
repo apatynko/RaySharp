@@ -73,14 +73,17 @@ namespace Raytracer
             outputLines.Add("255");         // Max value for colors
 
             List<Hitable> list = new List<Hitable>();
+            float radius = (float)Math.Cos(Math.PI / 4);
+
             list.Add(new Sphere(new Vec3(0.0F, 0.0F, -1.0F), 0.5F, new Lambertian(new Vec3(0.1F, 0.2F, 0.5F))));
             list.Add(new Sphere(new Vec3(0.0F, -100.5F, -1.0F), 100.0F, new Lambertian(new Vec3(0.8F, 0.8F, 0.0F))));
             list.Add(new Sphere(new Vec3(1.0F, 0.0F, -1.0F), 0.5F, new Metal(new Vec3(0.8F, 0.6F, 0.2F), 0.3F)));
             list.Add(new Sphere(new Vec3(-1.0F, 0.0F, -1.0F), 0.5F, new Dielectric(1.5F)));
             list.Add(new Sphere(new Vec3(-1.0F, 0.0F, -1.0F), -0.45F, new Dielectric(1.5F)));
+
             HitableList world = new HitableList(list);
 
-            Camera cam = new Camera();
+            Camera cam = new Camera(new Vec3(-2.0F, 2.0F, 1.0F), new Vec3(0.0F, 0.0F, -1.0F), new Vec3(0.0F, 1.0F, 0.0F), 90.0F, (float)nx / (float)ny);
 
             for (int j = ny - 1; j >= 0; j--)
             {

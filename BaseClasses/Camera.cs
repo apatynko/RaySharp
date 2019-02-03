@@ -13,18 +13,30 @@ namespace Raytracer.BaseClasses
         private Vec3 _vertical;         // Vertical field of view
 
         #region Constructors
-        public Camera()
+        public Camera(Vec3 lookFrom, Vec3 lookAt, Vec3 vup, float vFov, float aspect) // vFov = top to bottom in deg
         {
-            _lowerLeftCorner = new Vec3(-2.0F, -1.0F, -1.0F);
-            _horizontal = new Vec3(4.0F, 0.0F, 0.0F);
-            _vertical = new Vec3(0.0F, 2.0F, 0.0F);
-            _origin = new Vec3(0.0F, 0.0F, 0.0F);
+            Vec3 u = new Vec3();
+            Vec3 v = new Vec3();
+            Vec3 w = new Vec3();
+
+            float theta = vFov * (float)Math.PI / 180;
+            float halfHeight = (float)Math.Tan(theta / 2);
+            float halfWidth = aspect * halfHeight;
+
+            _origin = lookFrom;
+            w = Vec3.UnitVector(lookFrom - lookAt);
+            u = Vec3.UnitVector(Vec3.Cross(vup, w));
+            v = Vec3.Cross(w, u);
+
+            _lowerLeftCorner = _origin - halfWidth * u - halfHeight * v - w;
+            _horizontal = 2 * halfWidth * u;
+            _vertical = 2 * halfHeight * v;
         }
         #endregion
 
-        public Ray GetRay(float u, float v)
+        public Ray GetRay(float s, float t)
         {
-            return new Ray(_origin, _lowerLeftCorner + u * _horizontal + v * _vertical - _origin);
+            return new Ray(_origin, _lowerLeftCorner + s * _horizontal + t * _vertical - _origin);
         }
     }
 }

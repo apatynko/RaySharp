@@ -132,7 +132,7 @@ namespace Raytracer.Geometry
             return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
         }
 
-        public Vec3 Cross(Vec3 a, Vec3 b)
+        public static Vec3 Cross(Vec3 a, Vec3 b)
         {
             float e0 = a[1] * b[2] - a[2] * b[1];
             float e1 = -(a[0] * b[2] - a[2] * b[0]);
