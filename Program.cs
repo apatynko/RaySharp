@@ -6,8 +6,24 @@ namespace Raytracer
 {
     class Program
     {
+        public static bool HitSphere(Vec3 center, float radius, Ray r)
+        {
+            Vec3 oc = r.Origin() - center;
+            float a = Vec3.Dot(r.Direction(), r.Direction());
+            float b = 2.0F * Vec3.Dot(oc, r.Direction());
+            float c = Vec3.Dot(oc, oc) - radius * radius;
+            float discriminant = b * b - 4 * a * c;
+
+            return discriminant > 0;
+        }
+
         private static Vec3 Color(Ray r)
         {
+            if(HitSphere(new Vec3(0.0F, 0.0F, -1.0F), 0.5F, r))
+            {
+                return new Vec3(1.0F, 0.0F, 0.0F);
+            }
+
             Vec3 unitDirection = Vec3.UnitVector(r.Direction());
             float t = 0.5F * (unitDirection.Y() + 1.0F);
 
