@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Raytracer
+namespace Raytracer.BaseClasses
 {
     public class HitableList : Hitable
     {
@@ -29,6 +29,7 @@ namespace Raytracer
             rec.T = 0.0F;
             rec.P = null;
             rec.Normal = null;
+            rec.Material = null;
 
             foreach (var hitable in _list)
             {

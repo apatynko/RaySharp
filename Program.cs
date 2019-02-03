@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Raytracer.BaseClasses;
+using Raytracer.Geometry;
+using Raytracer.Materials;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -24,25 +27,24 @@ namespace Raytracer
             }
         }
 
-        public static Vec3 RandomInUnitSphere()
-        {
-            Vec3 p = new Vec3();
-            Random rnd = new Random();
-            do
-            {
-                p = 2.0F * new Vec3((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble()) - new Vec3(1.0F, 1.0F, 1.0F);
-            } while (p.SquaredLength() >= 1.0F);
-            return p;
-        }
-
-        private static Vec3 Color(Ray r, HitableList world)
+        private static Vec3 Color(Ray r, HitableList world, int depth)
         {
             HitRecord rec = new HitRecord();
 
             if (world.Hit(r, 0.001F, float.MaxValue, out rec))
             {
-                Vec3 target = rec.P + rec.Normal + RandomInUnitSphere();
-                return 0.5F * Color(new Ray(rec.P, target-rec.P), world);
+                Ray scattered = new Ray();
+                Vec3 attenuation = new Vec3();
+
+                if (depth < 50 && rec.Material.scatter(r, rec, out attenuation, out scattered))
+                {
+                    return attenuation * Color(scattered, world, depth + 1);
+                }
+                else
+                {
+                    return new Vec3(0.0F, 0.0F, 0.0F);
+                }
+                
             }
             else
             {
@@ -71,8 +73,10 @@ namespace Raytracer
             outputLines.Add("255");         // Max value for colors
 
             List<Hitable> list = new List<Hitable>();
-            list.Add(new Sphere(new Vec3(0.0F, 0.0F, -1.0F), 0.5F));
-            list.Add(new Sphere(new Vec3(0.0F, -100.5F, -1.0F), 100.0F));
+            list.Add(new Sphere(new Vec3(0.0F, 0.0F, -1.0F), 0.5F, new Lambertian(new Vec3(0.8F, 0.3F, 0.3F))));
+            list.Add(new Sphere(new Vec3(0.0F, -100.5F, -1.0F), 100.0F, new Lambertian(new Vec3(0.8F, 0.8F, 0.0F))));
+            list.Add(new Sphere(new Vec3(1.0F, 0.0F, -1.0F), 0.5F, new Metal(new Vec3(0.8F, 0.6F, 0.2F), 0.3F)));
+            list.Add(new Sphere(new Vec3(-1.0F, 0.0F, -1.0F), 0.5F, new Metal(new Vec3(0.8F, 0.8F, 0.8F), 1.0F)));
             HitableList world = new HitableList(list);
 
             Camera cam = new Camera();
@@ -89,7 +93,7 @@ namespace Raytracer
                         float v = (float)(j + rnd.NextDouble()) / (float)ny;
 
                         Ray r = cam.GetRay(u, v);
-                        col += Color(r, world);
+                        col += Color(r, world, 0);
                     }
                     col /= (float)ns;
                     col = new Vec3((float)Math.Sqrt(col[0]), (float)Math.Sqrt(col[1]), (float)Math.Sqrt(col[2]));

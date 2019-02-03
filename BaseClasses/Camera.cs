@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Raytracer.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Raytracer
+namespace Raytracer.BaseClasses
 {
     public class Camera
     {

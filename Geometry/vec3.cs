@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Raytracer
+namespace Raytracer.Geometry
 {
     public class Vec3
     {
@@ -144,6 +144,22 @@ namespace Raytracer
         public static Vec3 UnitVector(Vec3 v)
         {
             return v / v.Length();
+        }
+
+        public static Vec3 RandomInUnitSphere()
+        {
+            Vec3 p = new Vec3();
+            Random rnd = new Random();
+            do
+            {
+                p = 2.0F * new Vec3((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble()) - new Vec3(1.0F, 1.0F, 1.0F);
+            } while (p.SquaredLength() >= 1.0F);
+            return p;
+        }
+
+        public static Vec3 Reflect(Vec3 v, Vec3 n)
+        {
+            return v - 2 * Dot(v, n) * n;
         }
         #endregion
     }

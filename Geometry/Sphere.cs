@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Raytracer.BaseClasses;
+using Raytracer.Materials;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Raytracer
+namespace Raytracer.Geometry
 {
     public class Sphere : Hitable
     {
         private Vec3 _center;
         private float _radius;
+        private Material _material;
 
         #region Constructors
         public Sphere()
@@ -15,10 +18,11 @@ namespace Raytracer
 
         }
 
-        public Sphere(Vec3 cen, float r)
+        public Sphere(Vec3 cen, float r, Material mat)
         {
             _center = cen;
             _radius = r;
+            _material = mat;
         }
         #endregion
 
@@ -39,6 +43,7 @@ namespace Raytracer
                     rec.T = temp;
                     rec.P = r.PointAtParameter(rec.T);
                     rec.Normal = (rec.P - _center) / _radius;
+                    rec.Material = _material;
                     return true;
                 }
 
@@ -48,6 +53,7 @@ namespace Raytracer
                     rec.T = temp;
                     rec.P = r.PointAtParameter(rec.T);
                     rec.Normal = (rec.P - _center) / _radius;
+                    rec.Material = _material;
                     return true;
                 }
             }
@@ -55,6 +61,7 @@ namespace Raytracer
             rec.T = 0.0F;
             rec.P = null;
             rec.Normal = null;
+            rec.Material = null;
             return false;
         }
     }
