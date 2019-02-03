@@ -83,7 +83,11 @@ namespace Raytracer
 
             HitableList world = new HitableList(list);
 
-            Camera cam = new Camera(new Vec3(-2.0F, 2.0F, 1.0F), new Vec3(0.0F, 0.0F, -1.0F), new Vec3(0.0F, 1.0F, 0.0F), 90.0F, (float)nx / (float)ny);
+            Vec3 lookfrom = new Vec3(3.0F, 3.0F, 2.0F);
+            Vec3 lookat = new Vec3(0.0F, 0.0F, -1.0F);
+            float distToFocus = (lookfrom - lookat).Length();
+            float aperture = 2.0F;
+            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0F, 1.0F, 0.0F), 20.0F, (float)nx / (float)ny, aperture, distToFocus);
 
             for (int j = ny - 1; j >= 0; j--)
             {

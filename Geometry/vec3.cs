@@ -157,6 +157,17 @@ namespace Raytracer.Geometry
             return p;
         }
 
+        public static Vec3 RandomInUnitDisk()
+        {
+            Vec3 p = new Vec3();
+            Random rnd = new Random();
+            do
+            {
+                p = 2.0F * new Vec3((float)rnd.NextDouble(), (float)rnd.NextDouble(), 0) - new Vec3(1.0F, 1.0F, 0.0F);
+            } while (Dot(p, p) >= 1.0F);
+            return p;
+        }
+
         public static Vec3 Reflect(Vec3 v, Vec3 n)
         {
             return v - 2 * Dot(v, n) * n;
