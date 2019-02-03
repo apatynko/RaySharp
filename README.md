@@ -18,7 +18,7 @@ The code after completing each chapter can be found in it's own commit.
 | 8       | Metal                                 | 5e33dac95d7e599b2952ba29958bcf3475214e41 |
 | 9       | Dielectrics                           | c615d8b30665195ee6c1f8b4465e51ce2116b42c |
 | 10      | Positionable Camera                   | b1e615df8a51a8a13a9703f72d185cd01207e836 |
-| 11      | Defocus Blur                          | Pending                                  |
+| 11      | Defocus Blur                          | cf8b6390770b53653ab820822f1804ba7ac53e2b |
 | 12      | Where Next?                           | Pending                                  |
 
 ## Original Tutorial & Code
