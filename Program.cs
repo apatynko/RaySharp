@@ -52,30 +52,34 @@ namespace Raytracer
 
             var nx = 200;
             var ny = 100;
+            var ns = 100;
 
             outputLines.Add("P3");          // Filetype identifier
             outputLines.Add($"{nx} {ny}");  // Image dimensions
             outputLines.Add("255");         // Max value for colors
-
-            Vec3 lowerLeftCorner = new Vec3(-2.0F, -1.0F, -1.0F);   // Starting point for "scanning"
-            Vec3 horizontal = new Vec3(4.0F, 0.0F, 0.0F);           // Horizontal field of view
-            Vec3 vertical = new Vec3(0.0F, 2.0F, 0.0F);             // Vertical field of view
-            Vec3 origin = new Vec3(0.0F, 0.0F, 0.0F);               // Camera center / "eye position"
 
             List<Hitable> list = new List<Hitable>();
             list.Add(new Sphere(new Vec3(0.0F, 0.0F, -1.0F), 0.5F));
             list.Add(new Sphere(new Vec3(0.0F, -100.5F, -1.0F), 100.0F));
             HitableList world = new HitableList(list);
 
+            Camera cam = new Camera();
+
             for (int j = ny - 1; j >= 0; j--)
             {
                 for (int i = 0; i < nx; i++)
                 {
-                    float u = (float)i / (float)nx;
-                    float v = (float)j / (float)ny;
+                    Vec3 col = new Vec3(0.0F, 0.0F, 0.0F);
+                    var rnd = new Random();
+                    for (int s = 0; s < ns; s++)
+                    {
+                        float u = (float)(i + rnd.NextDouble()) / (float)nx;
+                        float v = (float)(j + rnd.NextDouble()) / (float)ny;
 
-                    Ray r = new Ray(origin, lowerLeftCorner + u * horizontal + v * vertical);
-                    Vec3 col = Color(r, world);
+                        Ray r = cam.GetRay(u, v);
+                        col += Color(r, world);
+                    }
+                    col /= (float)ns;
 
                     int ir = (int)(255.9 * col[0]);
                     int ig = (int)(255.9 * col[1]);
