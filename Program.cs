@@ -27,12 +27,10 @@ namespace Raytracer
             {
                 for (int i = 0; i < nx; i++)
                 {
-                    float r = (float)i / (float)nx;
-                    float g = (float)j / (float)ny;
-                    float b = 0.2F;
-                    int ir = (int)(255.9 * r);
-                    int ig = (int)(255.9 * g);
-                    int ib = (int)(255.9 * b);
+                    Vec3 col = new Vec3((float)i / (float)nx, (float)j / (float)ny, 0.2F);
+                    int ir = (int)(255.9 * col[0]);
+                    int ig = (int)(255.9 * col[1]);
+                    int ib = (int)(255.9 * col[2]);
 
                     outputLines.Add($"{ir} {ig} {ib}");
                 }
