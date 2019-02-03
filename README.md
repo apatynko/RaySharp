@@ -14,7 +14,7 @@ The code after completing each chapter can be found in it's own commit.
 | 4       | Adding a Sphere                       | 5f4b4c3b154b991efd838d90ddc7f292ad77bd92 |
 | 5       | Surface Normals and Multiple Objects  | f03a5eabe50d84c7bd940777964fc6e99f7ea3e4 |
 | 6       | Antialiasing                          | 94dd246c9a4d0bcea53758a156c88734a656e561 |
-| 7       | Diffuse Materials                     | Pending                                  |
+| 7       | Diffuse Materials                     | 6e3fa53539bc61e8e108d4d0cfb9600191394ea1 |
 | 8       | Metal                                 | Pending                                  |
 | 9       | Dielectrics                           | Pending                                  |
 | 10      | Positionable Camera                   | Pending                                  |
