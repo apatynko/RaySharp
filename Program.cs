@@ -24,13 +24,25 @@ namespace Raytracer
             }
         }
 
+        public static Vec3 RandomInUnitSphere()
+        {
+            Vec3 p = new Vec3();
+            Random rnd = new Random();
+            do
+            {
+                p = 2.0F * new Vec3((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble()) - new Vec3(1.0F, 1.0F, 1.0F);
+            } while (p.SquaredLength() >= 1.0F);
+            return p;
+        }
+
         private static Vec3 Color(Ray r, HitableList world)
         {
             HitRecord rec = new HitRecord();
 
-            if (world.Hit(r, 0.0F, float.MaxValue, out rec))
+            if (world.Hit(r, 0.001F, float.MaxValue, out rec))
             {
-                return 0.5F * new Vec3(rec.Normal.X() + 1, rec.Normal.Y() + 1, rec.Normal.Z() + 1);
+                Vec3 target = rec.P + rec.Normal + RandomInUnitSphere();
+                return 0.5F * Color(new Ray(rec.P, target-rec.P), world);
             }
             else
             {
@@ -80,7 +92,7 @@ namespace Raytracer
                         col += Color(r, world);
                     }
                     col /= (float)ns;
-
+                    col = new Vec3((float)Math.Sqrt(col[0]), (float)Math.Sqrt(col[1]), (float)Math.Sqrt(col[2]));
                     int ir = (int)(255.9 * col[0]);
                     int ig = (int)(255.9 * col[1]);
                     int ib = (int)(255.9 * col[2]);
