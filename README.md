@@ -2,6 +2,10 @@
 
 Implementation of Peter Shirley's raytracing tutorial in C#
 
+## Current Example Output
+
+![Example Output](output/output.jpeg)
+
 ## Chapters
 
 The code after completing each chapter can be found in it's own commit.
@@ -19,7 +23,11 @@ The code after completing each chapter can be found in it's own commit.
 | 9       | Dielectrics                           | c615d8b30665195ee6c1f8b4465e51ce2116b42c |
 | 10      | Positionable Camera                   | b1e615df8a51a8a13a9703f72d185cd01207e836 |
 | 11      | Defocus Blur                          | cf8b6390770b53653ab820822f1804ba7ac53e2b |
-| 12      | Where Next?                           | Pending                                  |
+| 12      | Where Next?                           | 1eca2ed1d639ceed3aa568485ce7527cfeb01c27 |
+
+## Modifications
+
+The example code from the tutorial has been modified to parallelize the line-by-line rendering of the output image.
 
 ## Original Tutorial & Code
 
