@@ -85,15 +85,9 @@ namespace Raytracer
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
             var outputFileName = Path.Combine(homePath, "output.ppm");
 
-            var outputLines = new List<string>();
-
             var nx = 1200;
             var ny = 800;
             var ns = 10; // Antialising samples per pixel
-
-            outputLines.Add("P3");          // Filetype identifier
-            outputLines.Add($"{nx} {ny}");  // Image dimensions
-            outputLines.Add("255");         // Max value for colors
             
             HitableList world = CreateRandomScene();
 
@@ -106,7 +100,7 @@ namespace Raytracer
             var rnd = new Random();
 
             var lineDict = new Dictionary<int, List<string>>();
-            Parallel.For(0, ny - 1, j =>
+            Parallel.For(0, ny, j =>
             {
                 var lineList = new List<string>();
 
@@ -135,45 +129,18 @@ namespace Raytracer
                 lineDict.Add(j, lineList);
             });
 
-            var keys = lineDict.Keys.ToList();
-            keys.Sort();
-            keys.Reverse();
-
-            foreach(var key in keys)
-            {
-                outputLines.AddRange(lineDict[key]);
-            }
-
-            //for (int j = ny - 1; j >= 0; j--)
-            //{
-            //    for (int i = 0; i < nx; i++)
-            //    {
-            //        Vec3 col = new Vec3(0.0F, 0.0F, 0.0F);
-
-            //        for (int s = 0; s < ns; s++)
-            //        {
-            //            float u = (float)(i + rnd.NextDouble()) / (float)nx;
-            //            float v = (float)(j + rnd.NextDouble()) / (float)ny;
-
-            //            Ray r = cam.GetRay(u, v);
-            //            col += Color(r, world, 0);
-            //        }
-
-            //        col /= (float)ns;
-            //        col = new Vec3((float)Math.Sqrt(col[0]), (float)Math.Sqrt(col[1]), (float)Math.Sqrt(col[2]));
-            //        int ir = (int)(255.9 * col[0]);
-            //        int ig = (int)(255.9 * col[1]);
-            //        int ib = (int)(255.9 * col[2]);
-
-            //        outputLines.Add($"{ir} {ig} {ib}");
-            //    }
-            //}
-
             using (var writer = File.CreateText(outputFileName))
             {
-                foreach (var line in outputLines)
+                writer.WriteLine("P3");          // Filetype identifier
+                writer.WriteLine($"{nx} {ny}");  // Image dimensions
+                writer.WriteLine("255");         // Max value for colors
+
+                for (int j = ny - 1; j >= 0; j--)
                 {
-                    writer.WriteLine(line);
+                    foreach (var line in lineDict[j])
+                    {
+                        writer.WriteLine(line);
+                    }
                 }
             }
         }
