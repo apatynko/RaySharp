@@ -1,6 +1,6 @@
-﻿# Raytracing in One Weekend
+﻿# Ray Tracing in C#
 
-Implementation of Peter Shirley's raytracing tutorial in C#
+Implementation of Peter Shirley's raytracing tutorials in C#
 
 ## Current Example Output
 
@@ -9,6 +9,8 @@ Implementation of Peter Shirley's raytracing tutorial in C#
 ## Chapters
 
 The code after completing each chapter can be found in it's own commit.
+
+### Ray Tracing in One Weekend
 
 | Chapter | Title                                 | Commit                                   |
 |:-------:|:--------------------------------------|:-----------------------------------------|
@@ -24,6 +26,20 @@ The code after completing each chapter can be found in it's own commit.
 | 10      | Positionable Camera                   | [b1e615d](https://github.com/bschne/RaytracingInOneWeekend/commit/b1e615df8a51a8a13a9703f72d185cd01207e836) |
 | 11      | Defocus Blur                          | [cf8b639](https://github.com/bschne/RaytracingInOneWeekend/commit/cf8b6390770b53653ab820822f1804ba7ac53e2b) |
 | 12      | Where Next?                           | [1eca2ed](https://github.com/bschne/RaytracingInOneWeekend/commit/1eca2ed1d639ceed3aa568485ce7527cfeb01c27) |
+
+### Ray Tracing: The Next Week
+
+| Chapter | Title                                 | Commit                                   |
+|:-------:|:--------------------------------------|:-----------------------------------------|
+| 1       | Motion Blur                           | PENDING                                  |
+| 2       | Bounding Volume Hierarchies           | PENDING                                  |
+| 3       | Solid Textures                        | PENDING                                  |
+| 4       | Perlin Noise                          | PENDING                                  |
+| 5       | Image Texture Mapping                 | PENDING                                  |
+| 6       | Rectangles and Lights                 | PENDING                                  |
+| 7       | Instances                             | PENDING                                  |
+| 8       | Volumes                               | PENDING                                  |
+| 9       | A Scene Testing All New Features      | PENDING                                  |
 
 ## Modifications
 
