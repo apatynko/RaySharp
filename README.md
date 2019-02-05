@@ -47,4 +47,6 @@ The example code from the tutorial has been modified to parallelize the line-by-
 
 ## Original Tutorial & Code
 
-The links to the original tutorial as a PDF and further ressources like the author's source code can be found at [http://in1weekend.blogspot.com/2016/01/ray-tracing-in-one-weekend.html](http://in1weekend.blogspot.com/2016/01/ray-tracing-in-one-weekend.html)
+The author has made the PDFs of all tutorials available on a "pay what you want" basis (see [original tweet](https://twitter.com/peter_shirley/status/984947257035243520?lang=de)) on google drive here: https://drive.google.com/drive/folders/14yayBb9XiL16lmuhbYhhvea8mKUUK77W
+
+The author's original source code in C++ can be found on his github profile here: https://github.com/petershirley
