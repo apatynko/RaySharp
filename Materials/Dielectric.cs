@@ -17,7 +17,7 @@ namespace Raytracer.Materials
         }
         #endregion
 
-        public override bool scatter(Ray rIn, HitRecord rec, out Vec3 attenuation, out Ray scattered)
+        public override bool Scatter(Ray rIn, HitRecord rec, out Vec3 attenuation, out Ray scattered)
         {
             Vec3 outwardNormal = new Vec3();
             Vec3 reflected = Vec3.Reflect(rIn.Direction(), rec.Normal);

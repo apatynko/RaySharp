@@ -20,7 +20,7 @@ namespace Raytracer
                 Ray scattered = new Ray();
                 Vec3 attenuation = new Vec3();
 
-                if (depth < 50 && rec.Material.scatter(r, rec, out attenuation, out scattered))
+                if (depth < 50 && rec.Material.Scatter(r, rec, out attenuation, out scattered))
                 {
                     return attenuation * Color(scattered, world, depth + 1);
                 }
@@ -28,7 +28,6 @@ namespace Raytracer
                 {
                     return new Vec3(0.0F, 0.0F, 0.0F);
                 }
-                
             }
             else
             {
