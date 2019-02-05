@@ -94,7 +94,7 @@ namespace Raytracer.Geometry
 
         public static Vec3 operator *(float t, Vec3 v)
         {
-            return new Vec3(t * v[0], t * v[1], t * v[2]);
+            return ScalarMultiplication(v, t);
         }
 
         public static Vec3 operator /(Vec3 v, float t)
@@ -104,7 +104,7 @@ namespace Raytracer.Geometry
 
         public static Vec3 operator *(Vec3 v, float t)
         {
-            return new Vec3(t * v[0], t * v[1], t * v[2]);
+            return ScalarMultiplication(v, t);
         }
         #endregion
 
@@ -189,6 +189,13 @@ namespace Raytracer.Geometry
                 refracted = null;
                 return false;
             }
+        }
+        #endregion
+
+        #region Private Methods
+        private static Vec3 ScalarMultiplication(Vec3 v, float t)
+        {
+            return new Vec3(t * v[0], t * v[1], t * v[2]);
         }
         #endregion
     }
