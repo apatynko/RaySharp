@@ -2,8 +2,6 @@
 
 Implementation of Peter Shirley's raytracing tutorials in C#
 
-## Current Example Output
-
 ![Example Output](output/output.jpeg)
 
 ## Chapters
