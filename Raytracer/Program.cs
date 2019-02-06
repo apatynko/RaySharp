@@ -130,13 +130,10 @@ namespace Raytracer
 
                     col /= ns;
                     col = new Vec3(Math.Sqrt(col[0]), Math.Sqrt(col[1]), Math.Sqrt(col[2]));
-                    int ir = (int)(255.9 * col[0]);
-                    int ig = (int)(255.9 * col[1]);
-                    int ib = (int)(255.9 * col[2]);
                     
-                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i)] = (byte)ir;
-                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 1] = (byte)ig;
-                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 2] = (byte)ib;
+                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i)] = (byte)(255.9 * col[0]);
+                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 1] = (byte)(255.9 * col[1]);
+                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 2] = (byte)(255.9 * col[2]);
                     outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 3] = 255;
                 }
 
