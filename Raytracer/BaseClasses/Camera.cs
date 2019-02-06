@@ -14,11 +14,18 @@ namespace Raytracer.BaseClasses
         private Vec3 _v;
         private Vec3 _w;
 
+        private double _time0;
+        private double _time1;
+
         private double _lensRadius;
 
         #region Constructors
-        public Camera(Vec3 lookFrom, Vec3 lookAt, Vec3 vup, double vFov, double aspect, double aperture, double focusDist) // vFov = top to bottom in deg
+        public Camera(Vec3 lookFrom, Vec3 lookAt, Vec3 vup, double vFov, double aspect, 
+            double aperture, double focusDist, double t0, double t1) // vFov = top to bottom in deg
         {
+            _time0 = t0;
+            _time1 = t1;
+
             _lensRadius = aperture / 2.0;
             _u = new Vec3();
             _v = new Vec3();
@@ -43,7 +50,8 @@ namespace Raytracer.BaseClasses
         {
             Vec3 rd = _lensRadius * Vec3.RandomInUnitDisk();
             Vec3 offset = _u * rd.X() + _v * rd.Y();
-            return new Ray(_origin + offset, _lowerLeftCorner + s * _horizontal + t * _vertical - _origin - offset);
+            double time = _time0 + new Random().NextDouble() * (_time1 - _time0);
+            return new Ray(_origin + offset, _lowerLeftCorner + s * _horizontal + t * _vertical - _origin - offset, time);
         }
     }
 }

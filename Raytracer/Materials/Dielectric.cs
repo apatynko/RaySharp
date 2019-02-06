@@ -50,11 +50,11 @@ namespace Raytracer.Materials
             var rnd = new Random();
             if (rnd.NextDouble() < reflectProb)
             {
-                scattered = new Ray(rec.P, reflected);
+                scattered = new Ray(rec.P, reflected, rIn.Time());
             }
             else
             {
-                scattered = new Ray(rec.P, refracted);
+                scattered = new Ray(rec.P, refracted, rIn.Time());
             }
 
             return true;

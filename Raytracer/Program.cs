@@ -56,7 +56,7 @@ namespace Raytracer
                     {
                         if (chooseMaterial < 0.8) // diffuse
                         {
-                            list.Add(new Sphere(center, 0.2, new Lambertian(new Vec3((rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble())))));
+                            list.Add(new MovingSphere(center, center + new Vec3(0.0, 0.5 * rnd.NextDouble(), 0.0), 0.0, 1.0, 0.2, new Lambertian(new Vec3((rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble())))));
                         }
                         else if (chooseMaterial < 0.95) // metal
                         {
@@ -104,7 +104,7 @@ namespace Raytracer
             Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
             double distToFocus = 10.0;
             double aperture = 0.1;
-            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, nx / ny, aperture, distToFocus);
+            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, nx / ny, aperture, distToFocus, 0.0, 1.0);
 
             var rnd = new Random();
             byte[] outputBytes = new byte[4 * nx * ny];
