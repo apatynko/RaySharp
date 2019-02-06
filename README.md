@@ -1,4 +1,4 @@
-﻿# Ray Tracing in C#
+﻿# RaySharp - Ray Tracing in C#
 
 Implementation of Peter Shirley's raytracing tutorials in C#
 
@@ -41,7 +41,12 @@ The code after completing each chapter can be found in it's own commit.
 
 ## Modifications
 
-The example code from the tutorial has been modified to parallelize the line-by-line rendering of the output image.
+The example code from the tutorial has been modified as follows:
+
+- This implementation uses doubles instead of floats (to avoid unnecessary casts as the math operations provided by .NET Core mostly use doubles)
+- The line-by-line rendering of the output image is parallelized
+- The output goes to a file instead of standard out
+- Progress is shown on the console
 
 ## Original Tutorial & Code
 

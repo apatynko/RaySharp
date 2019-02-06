@@ -91,6 +91,11 @@ namespace Raytracer
             var ny = 100;
             var ns = 50; // Antialising samples per pixel
 
+            Console.WriteLine($"Width:\t{nx}");
+            Console.WriteLine($"Height:\t{ny}");
+            Console.WriteLine($"Antialiasing:\t{ns}");
+            Console.WriteLine();
+
             HitableList world = CreateRandomScene();
 
             Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
@@ -100,6 +105,9 @@ namespace Raytracer
             Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, nx / ny, aperture, distToFocus);
 
             var rnd = new Random();
+
+            Console.WriteLine("Rendering...");
+            UpdateProgress(ny, 0);
 
             var lineDict = new Dictionary<int, List<string>>();
             Parallel.For(0, ny, j =>
@@ -129,7 +137,10 @@ namespace Raytracer
                 }
 
                 lineDict.Add(j, lineList);
+                UpdateProgress(ny, lineDict.Count);
             });
+
+            Console.WriteLine("\nRendering completed, writing to file...");
 
             using (var writer = File.CreateText(outputFileName))
             {
@@ -145,6 +156,15 @@ namespace Raytracer
                     }
                 }
             }
+
+            Console.WriteLine("Saving completed, press any key to exit.");
+            Console.ReadKey();
+        }
+
+        private static void UpdateProgress(int totalLines, int renderedLines)
+        {
+            double progress = (double)renderedLines / (double)totalLines * 100.0;
+            Console.WriteLine($"Lines completed: {renderedLines}/{totalLines}\t\tProgress: {Math.Round(progress, 2)}%");
         }
     }
 }
