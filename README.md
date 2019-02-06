@@ -43,10 +43,10 @@ The code after completing each chapter can be found in it's own commit.
 
 The example code from the tutorial has been modified as follows:
 
-- This implementation uses doubles instead of floats (to avoid unnecessary casts as the math operations provided by .NET Core mostly use doubles)
+- The implementation uses doubles instead of floats (to avoid unnecessary casts as the math operations provided by .NET Core mostly use doubles)
 - The line-by-line rendering of the output image is parallelized
-- The output goes to a file instead of standard out
-- Progress is shown on the console
+- The output goes to a JPG file instead of piping standard out to a PPM file
+- The rendering progress is shown on the console
 
 ## Original Tutorial & Code
 

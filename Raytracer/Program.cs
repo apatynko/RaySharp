@@ -1,6 +1,8 @@
 ﻿using Raytracer.BaseClasses;
 using Raytracer.Geometry;
 using Raytracer.Materials;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -81,7 +83,7 @@ namespace Raytracer
                    Environment.OSVersion.Platform == PlatformID.MacOSX)
                 ? Environment.GetEnvironmentVariable("HOME")
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-            var outputFileName = Path.Combine(homePath, "output.ppm");
+            var outputFileName = Path.Combine(homePath, "output.jpg");
 
             //var nx = 1200;
             //var ny = 800;
@@ -105,15 +107,14 @@ namespace Raytracer
             Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, nx / ny, aperture, distToFocus);
 
             var rnd = new Random();
+            byte[] outputBytes = new byte[4 * nx * ny];
 
             Console.WriteLine("Rendering...");
             UpdateProgress(ny, 0);
 
-            var lineDict = new Dictionary<int, List<string>>();
+            var linesRendered = 0;
             Parallel.For(0, ny, j =>
             {
-                var lineList = new List<string>();
-
                 for (int i = 0; i < nx; i++)
                 {
                     Vec3 col = new Vec3(0.0, 0.0, 0.0);
@@ -132,30 +133,21 @@ namespace Raytracer
                     int ir = (int)(255.9 * col[0]);
                     int ig = (int)(255.9 * col[1]);
                     int ib = (int)(255.9 * col[2]);
-
-                    lineList.Add($"{ir} {ig} {ib}");
+                    
+                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i)] = (byte)ir;
+                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 1] = (byte)ig;
+                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 2] = (byte)ib;
+                    outputBytes[4 * ((ny - 1 - j) * nx) + (4 * i) + 3] = 255;
                 }
 
-                lineDict.Add(j, lineList);
-                UpdateProgress(ny, lineDict.Count);
+                linesRendered++;
+                UpdateProgress(ny, linesRendered);
             });
 
             Console.WriteLine("\nRendering completed, writing to file...");
 
-            using (var writer = File.CreateText(outputFileName))
-            {
-                writer.WriteLine("P3");          // Filetype identifier
-                writer.WriteLine($"{nx} {ny}");  // Image dimensions
-                writer.WriteLine("255");         // Max value for colors
-
-                for (int j = ny - 1; j >= 0; j--)
-                {
-                    foreach (var line in lineDict[j])
-                    {
-                        writer.WriteLine(line);
-                    }
-                }
-            }
+            var outputImg = Image.LoadPixelData<Byte4>(outputBytes, nx, ny);
+            outputImg.Save(outputFileName);
 
             Console.WriteLine("Saving completed, press any key to exit.");
             Console.ReadKey();
