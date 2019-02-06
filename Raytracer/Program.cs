@@ -14,7 +14,7 @@ namespace Raytracer
         {
             HitRecord rec = new HitRecord();
 
-            if (world.Hit(r, 0.001F, float.MaxValue, out rec))
+            if (world.Hit(r, 0.001, double.MaxValue, out rec))
             {
                 Ray scattered = new Ray();
                 Vec3 attenuation = new Vec3();
@@ -25,14 +25,14 @@ namespace Raytracer
                 }
                 else
                 {
-                    return new Vec3(0.0F, 0.0F, 0.0F);
+                    return new Vec3(0.0, 0.0, 0.0);
                 }
             }
             else
             {
                 Vec3 unitDirection = Vec3.UnitVector(r.Direction());
-                float t = 0.5F * (unitDirection.Y() + 1.0F);
-                return (1.0F - t) * new Vec3(1.0F, 1.0F, 1.0F) + t * new Vec3(0.5F, 0.7F, 1.0F);
+                double t = 0.5 * (unitDirection.Y() + 1.0);
+                return (1.0 - t) * new Vec3(1.0, 1.0, 1.0) + t * new Vec3(0.5, 0.7, 1.0);
             }
         }
 
@@ -40,37 +40,37 @@ namespace Raytracer
         {
             List<Hitable> list = new List<Hitable>();
 
-            list.Add(new Sphere(new Vec3(0.0F, -1000.0F, 0.0F), 1000F, new Lambertian(new Vec3(0.5F, 0.5F, 0.5F))));
+            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0.0), 1000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
 
             var rnd = new Random();
             for (int a = -11; a < 11; a++)
             {
                 for (int b = -11; b < 11; b++)
                 {
-                    float chooseMaterial = (float)rnd.NextDouble();
-                    Vec3 center = new Vec3(a + 0.9F * (float)rnd.NextDouble(), 0.2F, b + 0.9F * (float)rnd.NextDouble());
+                    double chooseMaterial = rnd.NextDouble();
+                    Vec3 center = new Vec3(a + 0.9 * rnd.NextDouble(), 0.2, b + 0.9 * rnd.NextDouble());
 
-                    if ((center-new Vec3(4.0F,0.2F,0.0F)).Length() > 0.9)
+                    if ((center-new Vec3(4.0,0.2,0.0)).Length() > 0.9)
                     {
                         if (chooseMaterial < 0.8) // diffuse
                         {
-                            list.Add(new Sphere(center, 0.2F, new Lambertian(new Vec3((float)(rnd.NextDouble() * rnd.NextDouble()), (float)(rnd.NextDouble() * rnd.NextDouble()), (float)(rnd.NextDouble() * rnd.NextDouble())))));
+                            list.Add(new Sphere(center, 0.2, new Lambertian(new Vec3((rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble())))));
                         }
                         else if (chooseMaterial < 0.95) // metal
                         {
-                            list.Add(new Sphere(center, 0.2F, new Metal(new Vec3(0.5F*(1.0F+(float)rnd.NextDouble()), 0.5F * (1.0F + (float)rnd.NextDouble()), 0.5F * (1.0F + (float)rnd.NextDouble())), 0.5F*(float)rnd.NextDouble())));
+                            list.Add(new Sphere(center, 0.2, new Metal(new Vec3(0.5*(1.0+rnd.NextDouble()), 0.5 * (1.0 + rnd.NextDouble()), 0.5 * (1.0 + rnd.NextDouble())), 0.5*rnd.NextDouble())));
                         }
                         else // dielectric
                         {
-                            list.Add(new Sphere(center, 0.2F, new Dielectric(1.5F)));
+                            list.Add(new Sphere(center, 0.2, new Dielectric(1.5)));
                         }
                     }
                 }
             }
 
-            list.Add(new Sphere(new Vec3(0.0F, 1.0F, 0.0F), 1.0F, new Dielectric(1.5F)));
-            list.Add(new Sphere(new Vec3(-4.0F, 1.0F, 0.0F), 1.0F, new Lambertian(new Vec3(0.4F, 0.2F, 0.1F))));
-            list.Add(new Sphere(new Vec3(4.0F, 1.0F, 0.0F), 1.0F, new Metal(new Vec3(0.7F, 0.6F, 0.5F), 0.0F)));
+            list.Add(new Sphere(new Vec3(0.0, 1.0, 0.0), 1.0, new Dielectric(1.5)));
+            list.Add(new Sphere(new Vec3(-4.0, 1.0, 0.0), 1.0, new Lambertian(new Vec3(0.4, 0.2, 0.1))));
+            list.Add(new Sphere(new Vec3(4.0, 1.0, 0.0), 1.0, new Metal(new Vec3(0.7, 0.6, 0.5), 0.0)));
 
             return new HitableList(list);
         }
@@ -83,17 +83,21 @@ namespace Raytracer
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
             var outputFileName = Path.Combine(homePath, "output.ppm");
 
-            var nx = 1200;
-            var ny = 800;
-            var ns = 10; // Antialising samples per pixel
-            
+            //var nx = 1200;
+            //var ny = 800;
+            //var ns = 10; // Antialising samples per pixel
+
+            var nx = 200;
+            var ny = 100;
+            var ns = 50; // Antialising samples per pixel
+
             HitableList world = CreateRandomScene();
 
-            Vec3 lookfrom = new Vec3(13.0F, 2.0F, 3.0F);
-            Vec3 lookat = new Vec3(0.0F, 0.0F, 0.0F);
-            float distToFocus = 10.0F;
-            float aperture = 0.1F;
-            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0F, 1.0F, 0.0F), 20.0F, (float)nx / (float)ny, aperture, distToFocus);
+            Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
+            Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
+            double distToFocus = 10.0;
+            double aperture = 0.1;
+            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, nx / ny, aperture, distToFocus);
 
             var rnd = new Random();
 
@@ -104,19 +108,19 @@ namespace Raytracer
 
                 for (int i = 0; i < nx; i++)
                 {
-                    Vec3 col = new Vec3(0.0F, 0.0F, 0.0F);
+                    Vec3 col = new Vec3(0.0, 0.0, 0.0);
 
                     for (int s = 0; s < ns; s++)
                     {
-                        float u = (float)(i + rnd.NextDouble()) / (float)nx;
-                        float v = (float)(j + rnd.NextDouble()) / (float)ny;
+                        double u = (i + rnd.NextDouble()) / nx;
+                        double v = (j + rnd.NextDouble()) / ny;
 
                         Ray r = cam.GetRay(u, v);
                         col += Color(r, world, 0);
                     }
 
-                    col /= (float)ns;
-                    col = new Vec3((float)Math.Sqrt(col[0]), (float)Math.Sqrt(col[1]), (float)Math.Sqrt(col[2]));
+                    col /= ns;
+                    col = new Vec3(Math.Sqrt(col[0]), Math.Sqrt(col[1]), Math.Sqrt(col[2]));
                     int ir = (int)(255.9 * col[0]);
                     int ig = (int)(255.9 * col[1]);
                     int ib = (int)(255.9 * col[2]);

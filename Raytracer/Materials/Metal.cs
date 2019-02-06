@@ -1,17 +1,14 @@
 ﻿using Raytracer.BaseClasses;
 using Raytracer.Geometry;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Raytracer.Materials
 {
     public class Metal : Material
     {
         private Vec3 _albedo;
-        private float _fuzz;
+        private double _fuzz;
 
-        public Metal(Vec3 a, float f)
+        public Metal(Vec3 a, double f)
         {
             _albedo = a;
             _fuzz = f < 1 ? f : 1;

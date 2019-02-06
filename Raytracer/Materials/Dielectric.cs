@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Raytracer.BaseClasses;
 using Raytracer.Geometry;
 
@@ -8,10 +6,10 @@ namespace Raytracer.Materials
 {
     public class Dielectric : Material
     {
-        private float _refIndex;
+        private double _refIndex;
 
         #region Constructors
-        public Dielectric(float ri)
+        public Dielectric(double ri)
         {
             _refIndex = ri;
         }
@@ -21,11 +19,11 @@ namespace Raytracer.Materials
         {
             Vec3 outwardNormal = new Vec3();
             Vec3 reflected = Vec3.Reflect(rIn.Direction(), rec.Normal);
-            float niOverNt;
-            attenuation = new Vec3(1.0F, 1.0F, 1.0F);
+            double niOverNt;
+            attenuation = new Vec3(1.0, 1.0, 1.0);
             Vec3 refracted = new Vec3();
-            float reflectProb;
-            float cosine;
+            double reflectProb;
+            double cosine;
 
             if (Vec3.Dot(rIn.Direction(), rec.Normal) > 0)
             {
@@ -36,7 +34,7 @@ namespace Raytracer.Materials
             else
             {
                 outwardNormal = rec.Normal;
-                niOverNt = 1.0F / _refIndex;
+                niOverNt = 1.0 / _refIndex;
                 cosine = -Vec3.Dot(rIn.Direction(), rec.Normal) / rIn.Direction().Length();
             }
 
@@ -46,7 +44,7 @@ namespace Raytracer.Materials
             }
             else
             {
-                reflectProb = 1.0F;
+                reflectProb = 1.0;
             }
 
             var rnd = new Random();
@@ -63,11 +61,11 @@ namespace Raytracer.Materials
         }
 
         #region Private Methods
-        private float Schlick(float cosine, float refIndex)
+        private double Schlick(double cosine, double refIndex)
         {
-            float r0 = (1 - refIndex) / (1 + refIndex);
+            double r0 = (1 - refIndex) / (1 + refIndex);
             r0 *= r0;
-            return r0 + (1 - r0) * (float)Math.Pow((double)1-cosine, 5);
+            return r0 + (1 - r0) * Math.Pow(1-cosine, 5);
         }
         #endregion
     }

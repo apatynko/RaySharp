@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Raytracer.BaseClasses
 {
@@ -20,13 +18,13 @@ namespace Raytracer.BaseClasses
         }
         #endregion
 
-        public override bool Hit(Ray r, float tMin, float tMax, out HitRecord rec)
+        public override bool Hit(Ray r, double tMin, double tMax, out HitRecord rec)
         {
             HitRecord tempRecord = new HitRecord();
             bool hitAnything = false;
-            float closestSoFar = tMax;
+            double closestSoFar = tMax;
 
-            rec.T = 0.0F;
+            rec.T = 0.0;
             rec.P = null;
             rec.Normal = null;
             rec.Material = null;

@@ -1,7 +1,4 @@
 ﻿using Raytracer.Geometry;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Raytracer.BaseClasses
 {
@@ -34,7 +31,7 @@ namespace Raytracer.BaseClasses
             return _b;
         }
 
-        public Vec3 PointAtParameter(float t)
+        public Vec3 PointAtParameter(double t)
         {
             return _a + t * _b;
         }

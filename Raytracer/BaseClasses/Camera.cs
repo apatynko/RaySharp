@@ -1,7 +1,5 @@
 ﻿using Raytracer.Geometry;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Raytracer.BaseClasses
 {
@@ -16,19 +14,19 @@ namespace Raytracer.BaseClasses
         private Vec3 _v;
         private Vec3 _w;
 
-        private float _lensRadius;
+        private double _lensRadius;
 
         #region Constructors
-        public Camera(Vec3 lookFrom, Vec3 lookAt, Vec3 vup, float vFov, float aspect, float aperture, float focusDist) // vFov = top to bottom in deg
+        public Camera(Vec3 lookFrom, Vec3 lookAt, Vec3 vup, double vFov, double aspect, double aperture, double focusDist) // vFov = top to bottom in deg
         {
-            _lensRadius = aperture / 2.0F;
+            _lensRadius = aperture / 2.0;
             _u = new Vec3();
             _v = new Vec3();
             _w = new Vec3();
 
-            float theta = vFov * (float)Math.PI / 180;
-            float halfHeight = (float)Math.Tan(theta / 2);
-            float halfWidth = aspect * halfHeight;
+            double theta = vFov * Math.PI / 180;
+            double halfHeight = Math.Tan(theta / 2);
+            double halfWidth = aspect * halfHeight;
 
             _origin = lookFrom;
             _w = Vec3.UnitVector(lookFrom - lookAt);
@@ -41,7 +39,7 @@ namespace Raytracer.BaseClasses
         }
         #endregion
 
-        public Ray GetRay(float s, float t)
+        public Ray GetRay(double s, double t)
         {
             Vec3 rd = _lensRadius * Vec3.RandomInUnitDisk();
             Vec3 offset = _u * rd.X() + _v * rd.Y();

@@ -1,8 +1,5 @@
 ﻿using Raytracer.Geometry;
 using Raytracer.BaseClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Raytracer.Materials
 {
