@@ -62,5 +62,12 @@ namespace Raytracer.Geometry
             rec.Material = null;
             return false;
         }
+
+        public override bool BoundingBox(double t0, double t1, out AxisAlignedBoundingBox boundingBox)
+        {
+            boundingBox = new AxisAlignedBoundingBox(_center - new Vec3(_radius, _radius, _radius),
+                _center + new Vec3(_radius, _radius, _radius));
+            return true;
+        }
     }
 }

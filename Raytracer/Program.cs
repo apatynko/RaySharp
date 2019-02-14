@@ -12,7 +12,7 @@ namespace Raytracer
 {
     class Program
     {
-        private static Vec3 Color(Ray r, HitableList world, int depth)
+        private static Vec3 Color(Ray r, Hitable world, int depth)
         {
             HitRecord rec = new HitRecord();
 
@@ -38,7 +38,7 @@ namespace Raytracer
             }
         }
 
-        public static HitableList CreateRandomScene()
+        public static BvhNode CreateRandomScene()
         {
             List<Hitable> list = new List<Hitable>();
 
@@ -74,7 +74,7 @@ namespace Raytracer
             list.Add(new Sphere(new Vec3(-4.0, 1.0, 0.0), 1.0, new Lambertian(new Vec3(0.4, 0.2, 0.1))));
             list.Add(new Sphere(new Vec3(4.0, 1.0, 0.0), 1.0, new Metal(new Vec3(0.7, 0.6, 0.5), 0.0)));
 
-            return new HitableList(list);
+            return new BvhNode(list, 0.0, 1.0);
         }
 
         static void Main(string[] args)
@@ -83,28 +83,24 @@ namespace Raytracer
                    Environment.OSVersion.Platform == PlatformID.MacOSX)
                 ? Environment.GetEnvironmentVariable("HOME")
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-            var outputFileName = Path.Combine(homePath, "output.jpg");
+            var outputFileName = Path.Combine(new string[] { homePath, "output.jpg" });
 
-            //var nx = 1200;
-            //var ny = 800;
-            //var ns = 10; // Antialising samples per pixel
-
-            var nx = 200;
-            var ny = 100;
-            var ns = 50; // Antialising samples per pixel
+            var nx = 1200;  // Horizontal resolution
+            var ny = 800;   // Vertical resolution
+            var ns = 10;    // Antialising samples per pixel
 
             Console.WriteLine($"Width:\t{nx}");
             Console.WriteLine($"Height:\t{ny}");
             Console.WriteLine($"Antialiasing:\t{ns}");
             Console.WriteLine();
 
-            HitableList world = CreateRandomScene();
+            BvhNode world = CreateRandomScene();
 
             Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
             Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
             double distToFocus = 10.0;
             double aperture = 0.1;
-            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, nx / ny, aperture, distToFocus, 0.0, 1.0);
+            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, (double)nx / (double)ny, aperture, distToFocus, 0.0, 1.0);
 
             var rnd = new Random();
             byte[] outputBytes = new byte[4 * nx * ny];
@@ -153,7 +149,7 @@ namespace Raytracer
         private static void UpdateProgress(int totalLines, int renderedLines)
         {
             double progress = (double)renderedLines / (double)totalLines * 100.0;
-            Console.WriteLine($"Lines completed: {renderedLines}/{totalLines}\t\tProgress: {Math.Round(progress, 2)}%");
+            Console.WriteLine($"Lines completed: {renderedLines}/{totalLines} ({Math.Round(progress, 2)}%)");
         }
     }
 }

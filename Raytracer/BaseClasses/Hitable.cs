@@ -14,5 +14,6 @@ namespace Raytracer.BaseClasses
     public abstract class Hitable
     {
         public abstract bool Hit(Ray r, double tMin, double tMax, out HitRecord rec);
+        public abstract bool BoundingBox(double t0, double t1, out AxisAlignedBoundingBox boundingBox);
     }
 }
