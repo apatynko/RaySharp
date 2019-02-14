@@ -149,7 +149,8 @@ namespace Raytracer
         private static void UpdateProgress(int totalLines, int renderedLines)
         {
             double progress = (double)renderedLines / (double)totalLines * 100.0;
-            Console.WriteLine($"Lines completed: {renderedLines}/{totalLines} ({Math.Round(progress, 2)}%)");
+            int lineLen = totalLines.ToString().Length;
+            Console.WriteLine($"Lines completed: {renderedLines.ToString().PadLeft(lineLen,'0')}/{totalLines} ({Math.Round(progress, 2).ToString("000.00")}%)");
         }
     }
 }
