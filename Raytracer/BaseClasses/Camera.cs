@@ -48,9 +48,9 @@ namespace Raytracer.BaseClasses
 
         public Ray GetRay(double s, double t)
         {
-            Vec3 rd = _lensRadius * Vec3.RandomInUnitDisk();
+            Vec3 rd = _lensRadius * FastRandom.RandomInUnitDisk();
             Vec3 offset = _u * rd.X() + _v * rd.Y();
-            double time = _time0 + new Random().NextDouble() * (_time1 - _time0);
+            double time = _time0 + FastRandom.RandomDouble() * (_time1 - _time0);
             return new Ray(_origin + offset, _lowerLeftCorner + s * _horizontal + t * _vertical - _origin - offset, time);
         }
     }

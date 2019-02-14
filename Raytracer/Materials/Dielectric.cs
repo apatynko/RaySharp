@@ -47,8 +47,7 @@ namespace Raytracer.Materials
                 reflectProb = 1.0;
             }
 
-            var rnd = new Random();
-            if (rnd.NextDouble() < reflectProb)
+            if (FastRandom.RandomDouble() < reflectProb)
             {
                 scattered = new Ray(rec.P, reflected, rIn.Time());
             }

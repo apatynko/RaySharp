@@ -17,7 +17,7 @@ namespace Raytracer.Materials
         public override bool Scatter(Ray rIn, HitRecord rec, out Vec3 attenuation, out Ray scattered)
         {
             Vec3 reflected = Vec3.Reflect(Vec3.UnitVector(rIn.Direction()), rec.Normal);
-            scattered = new Ray(rec.P, reflected + _fuzz * Vec3.RandomInUnitSphere(), rIn.Time());
+            scattered = new Ray(rec.P, reflected + _fuzz * FastRandom.RandomInUnitSphere(), rIn.Time());
             attenuation = _albedo;
             return (Vec3.Dot(scattered.Direction(), rec.Normal) > 0);
         }

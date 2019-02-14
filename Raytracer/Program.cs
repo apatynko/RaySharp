@@ -44,23 +44,22 @@ namespace Raytracer
 
             list.Add(new Sphere(new Vec3(0.0, -1000.0, 0.0), 1000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
 
-            var rnd = new Random();
             for (int a = -11; a < 11; a++)
             {
                 for (int b = -11; b < 11; b++)
                 {
-                    double chooseMaterial = rnd.NextDouble();
-                    Vec3 center = new Vec3(a + 0.9 * rnd.NextDouble(), 0.2, b + 0.9 * rnd.NextDouble());
+                    double chooseMaterial = FastRandom.RandomDouble();
+                    Vec3 center = new Vec3(a + 0.9 * FastRandom.RandomDouble(), 0.2, b + 0.9 * FastRandom.RandomDouble());
 
                     if ((center-new Vec3(4.0,0.2,0.0)).Length() > 0.9)
                     {
                         if (chooseMaterial < 0.8) // diffuse
                         {
-                            list.Add(new MovingSphere(center, center + new Vec3(0.0, 0.5 * rnd.NextDouble(), 0.0), 0.0, 1.0, 0.2, new Lambertian(new Vec3((rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble()), (rnd.NextDouble() * rnd.NextDouble())))));
+                            list.Add(new MovingSphere(center, center + new Vec3(0.0, 0.5 * FastRandom.RandomDouble(), 0.0), 0.0, 1.0, 0.2, new Lambertian(new Vec3((FastRandom.RandomDouble() * FastRandom.RandomDouble()), (FastRandom.RandomDouble() * FastRandom.RandomDouble()), (FastRandom.RandomDouble() * FastRandom.RandomDouble())))));
                         }
                         else if (chooseMaterial < 0.95) // metal
                         {
-                            list.Add(new Sphere(center, 0.2, new Metal(new Vec3(0.5*(1.0+rnd.NextDouble()), 0.5 * (1.0 + rnd.NextDouble()), 0.5 * (1.0 + rnd.NextDouble())), 0.5*rnd.NextDouble())));
+                            list.Add(new Sphere(center, 0.2, new Metal(new Vec3(0.5*(1.0+ FastRandom.RandomDouble()), 0.5 * (1.0 + FastRandom.RandomDouble()), 0.5 * (1.0 + FastRandom.RandomDouble())), 0.5* FastRandom.RandomDouble())));
                         }
                         else // dielectric
                         {
@@ -79,6 +78,9 @@ namespace Raytracer
 
         static void Main(string[] args)
         {
+            // Seed RNG
+            FastRandom.Initialize((uint)new Random().Next());
+
             string homePath = (Environment.OSVersion.Platform == PlatformID.Unix ||
                    Environment.OSVersion.Platform == PlatformID.MacOSX)
                 ? Environment.GetEnvironmentVariable("HOME")
@@ -102,7 +104,6 @@ namespace Raytracer
             double aperture = 0.1;
             Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, (double)nx / (double)ny, aperture, distToFocus, 0.0, 1.0);
 
-            var rnd = new Random();
             byte[] outputBytes = new byte[4 * nx * ny];
 
             Console.WriteLine("Rendering...");
@@ -117,8 +118,8 @@ namespace Raytracer
 
                     for (int s = 0; s < ns; s++)
                     {
-                        double u = (i + rnd.NextDouble()) / nx;
-                        double v = (j + rnd.NextDouble()) / ny;
+                        double u = (i + FastRandom.RandomDouble()) / nx;
+                        double v = (j + FastRandom.RandomDouble()) / ny;
 
                         Ray r = cam.GetRay(u, v);
                         col += Color(r, world, 0);

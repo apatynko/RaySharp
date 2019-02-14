@@ -19,7 +19,7 @@ namespace Raytracer.Geometry
 
         public BvhNode(List<Hitable> list, double time0, double time1)
         {
-            int axis = (int)(new Random().NextDouble() * 3);
+            int axis = (int)(FastRandom.RandomDouble() * 3);
             list.Sort(compareHitable(axis));
 
             if (list.Count == 1)
