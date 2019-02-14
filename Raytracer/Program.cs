@@ -1,6 +1,7 @@
 ﻿using Raytracer.BaseClasses;
 using Raytracer.Geometry;
 using Raytracer.Materials;
+using Raytracer.Textures;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -42,7 +43,8 @@ namespace Raytracer
         {
             List<Hitable> list = new List<Hitable>();
 
-            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0.0), 1000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
+            var checker = new CheckerTexture(new ConstantTexture(new Vec3(0.2, 0.3, 0.1)), new ConstantTexture(new Vec3(0.9, 0.9, 0.9)));
+            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0.0), 1000, new Lambertian(checker)));
 
             for (int a = -11; a < 11; a++)
             {
@@ -55,7 +57,7 @@ namespace Raytracer
                     {
                         if (chooseMaterial < 0.8) // diffuse
                         {
-                            list.Add(new MovingSphere(center, center + new Vec3(0.0, 0.5 * FastRandom.RandomDouble(), 0.0), 0.0, 1.0, 0.2, new Lambertian(new Vec3((FastRandom.RandomDouble() * FastRandom.RandomDouble()), (FastRandom.RandomDouble() * FastRandom.RandomDouble()), (FastRandom.RandomDouble() * FastRandom.RandomDouble())))));
+                            list.Add(new MovingSphere(center, center + new Vec3(0.0, 0.5 * FastRandom.RandomDouble(), 0.0), 0.0, 1.0, 0.2, new Lambertian(new ConstantTexture(new Vec3(FastRandom.RandomDouble() * FastRandom.RandomDouble(), FastRandom.RandomDouble() * FastRandom.RandomDouble(), (FastRandom.RandomDouble() * FastRandom.RandomDouble()))))));
                         }
                         else if (chooseMaterial < 0.95) // metal
                         {
@@ -70,7 +72,7 @@ namespace Raytracer
             }
 
             list.Add(new Sphere(new Vec3(0.0, 1.0, 0.0), 1.0, new Dielectric(1.5)));
-            list.Add(new Sphere(new Vec3(-4.0, 1.0, 0.0), 1.0, new Lambertian(new Vec3(0.4, 0.2, 0.1))));
+            list.Add(new Sphere(new Vec3(-4.0, 1.0, 0.0), 1.0, new Lambertian(new ConstantTexture(new Vec3(0.4, 0.2, 0.1)))));
             list.Add(new Sphere(new Vec3(4.0, 1.0, 0.0), 1.0, new Metal(new Vec3(0.7, 0.6, 0.5), 0.0)));
 
             return new BvhNode(list, 0.0, 1.0);
@@ -87,8 +89,12 @@ namespace Raytracer
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
             var outputFileName = Path.Combine(new string[] { homePath, "output.jpg" });
 
-            var nx = 1200;  // Horizontal resolution
-            var ny = 800;   // Vertical resolution
+            //var nx = 1200;  // Horizontal resolution
+            //var ny = 800;   // Vertical resolution
+            //var ns = 10;    // Antialising samples per pixel
+
+            var nx = 600;  // Horizontal resolution
+            var ny = 400;   // Vertical resolution
             var ns = 10;    // Antialising samples per pixel
 
             Console.WriteLine($"Width:\t{nx}");

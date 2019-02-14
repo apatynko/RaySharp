@@ -1,14 +1,15 @@
 ﻿using Raytracer.Geometry;
 using Raytracer.BaseClasses;
+using Raytracer.Textures;
 
 namespace Raytracer.Materials
 {
     public class Lambertian : Material
     {
-        private Vec3 _albedo;
+        private Texture _albedo;
 
         #region Constructors
-        public Lambertian(Vec3 a)
+        public Lambertian(Texture a)
         {
             _albedo = a;
         }
@@ -18,7 +19,7 @@ namespace Raytracer.Materials
         {
             Vec3 target = rec.P + rec.Normal + FastRandom.RandomInUnitSphere();
             scattered = new Ray(rec.P, target - rec.P, rIn.Time());
-            attenuation = _albedo;
+            attenuation = _albedo.Value(0, 0, rec.P);
             return true;
         }
     }
