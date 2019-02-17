@@ -39,6 +39,17 @@ namespace Raytracer
             }
         }
 
+        public static HitableList TwoPerlinSpheres()
+        {
+            Texture perlin = new NoiseTexture(5.0);
+            List<Hitable> list = new List<Hitable>();
+
+            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0), 1000, new Lambertian(perlin)));
+            list.Add(new Sphere(new Vec3(0.0, 2.0, 0.0), 2, new Lambertian(perlin)));
+
+            return new HitableList(list);
+        }
+
         public static BvhNode CreateRandomScene()
         {
             List<Hitable> list = new List<Hitable>();
@@ -89,20 +100,21 @@ namespace Raytracer
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
             var outputFileName = Path.Combine(new string[] { homePath, "output.jpg" });
 
-            //var nx = 1200;  // Horizontal resolution
-            //var ny = 800;   // Vertical resolution
-            //var ns = 10;    // Antialising samples per pixel
+            var nx = 1200;  // Horizontal resolution
+            var ny = 800;   // Vertical resolution
+            var ns = 50;    // Antialising samples per pixel
 
-            var nx = 600;  // Horizontal resolution
-            var ny = 400;   // Vertical resolution
-            var ns = 10;    // Antialising samples per pixel
+            //var nx = 600;  // Horizontal resolution
+            //var ny = 400;   // Vertical resolution
+            //var ns = 10;    // Antialising samples per pixel
 
             Console.WriteLine($"Width:\t{nx}");
             Console.WriteLine($"Height:\t{ny}");
             Console.WriteLine($"Antialiasing:\t{ns}");
             Console.WriteLine();
 
-            BvhNode world = CreateRandomScene();
+            // BvhNode world = CreateRandomScene();
+            HitableList world = TwoPerlinSpheres();
 
             Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
             Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
