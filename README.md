@@ -32,7 +32,7 @@ The code after completing each chapter can be found in it's own commit.
 | 1       | Motion Blur                           | [1e5ed40](https://github.com/bschne/RaySharp/commit/1e5ed40768e2eaf4cf6c05b6d63d0097ae4ba8cc) |
 | 2       | Bounding Volume Hierarchies           | [736ddf4](https://github.com/bschne/RaySharp/commit/736ddf4ff8b570bed23d01ec897ebaf23c39e20e) |
 | 3       | Solid Textures                        | [0e78d91](https://github.com/bschne/RaySharp/commit/0e78d910d18b32fb6a86de62d60dd6386b564436) |
-| 4       | Perlin Noise                          | PENDING                                  |
+| 4       | Perlin Noise                          | [2b80f49](https://github.com/bschne/RaySharp/commit/2b80f492a9b528deb0ba488e3ff8047c562f502b) |
 | 5       | Image Texture Mapping                 | PENDING                                  |
 | 6       | Rectangles and Lights                 | PENDING                                  |
 | 7       | Instances                             | PENDING                                  |
