@@ -19,7 +19,7 @@ namespace Raytracer.Materials
         {
             Vec3 target = rec.P + rec.Normal + FastRandom.RandomInUnitSphere();
             scattered = new Ray(rec.P, target - rec.P, rIn.Time());
-            attenuation = _albedo.Value(0, 0, rec.P);
+            attenuation = _albedo.Value(rec.U, rec.V, rec.P);
             return true;
         }
     }

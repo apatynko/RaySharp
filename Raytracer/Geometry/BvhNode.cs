@@ -89,7 +89,9 @@ namespace Raytracer.Geometry
                     rec.Material = null;
                     rec.Normal = null;
                     rec.P = null;
-                    rec.T = 0;
+                    rec.T = 0.0;
+                    rec.U = 0.0;
+                    rec.V = 0.0;
                     return false;
                 }
             }
@@ -98,7 +100,9 @@ namespace Raytracer.Geometry
                 rec.Material = null;
                 rec.Normal = null;
                 rec.P = null;
-                rec.T = 0;
+                rec.T = 0.0;
+                rec.U = 0.0;
+                rec.V = 0.0;
                 return false;
             }
         }

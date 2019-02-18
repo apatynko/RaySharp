@@ -29,6 +29,8 @@ namespace Raytracer.BaseClasses
             rec.P = null;
             rec.Normal = null;
             rec.Material = null;
+            rec.U = 0.0;
+            rec.V = 0.0;
 
             foreach (var hitable in _list)
             {

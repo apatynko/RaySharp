@@ -6,6 +6,8 @@ namespace Raytracer.BaseClasses
     public struct HitRecord
     {
         public double T;
+        public double U;
+        public double V;
         public Vec3 P;
         public Vec3 Normal;
         public Material Material;

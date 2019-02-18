@@ -54,6 +54,7 @@ namespace Raytracer.Geometry
                     rec.P = r.PointAtParameter(rec.T);
                     rec.Normal = (rec.P - Center(r.Time())) / _radius;
                     rec.Material = _material;
+                    Sphere.GetSphereUV((rec.P - Center(r.Time())) / _radius, out rec.U, out rec.V);
                     return true;
                 }
 
@@ -64,6 +65,7 @@ namespace Raytracer.Geometry
                     rec.P = r.PointAtParameter(rec.T);
                     rec.Normal = (rec.P - Center(r.Time())) / _radius;
                     rec.Material = _material;
+                    Sphere.GetSphereUV((rec.P - Center(r.Time())) / _radius, out rec.U, out rec.V);
                     return true;
                 }
             }
@@ -72,6 +74,8 @@ namespace Raytracer.Geometry
             rec.P = null;
             rec.Normal = null;
             rec.Material = null;
+            rec.U = 0.0;
+            rec.V = 0.0;
             return false;
         }
 

@@ -42,6 +42,7 @@ namespace Raytracer.Geometry
                     rec.P = r.PointAtParameter(rec.T);
                     rec.Normal = (rec.P - _center) / _radius;
                     rec.Material = _material;
+                    GetSphereUV((rec.P - _center) / _radius, out rec.U, out rec.V);
                     return true;
                 }
 
@@ -52,12 +53,15 @@ namespace Raytracer.Geometry
                     rec.P = r.PointAtParameter(rec.T);
                     rec.Normal = (rec.P - _center) / _radius;
                     rec.Material = _material;
+                    GetSphereUV((rec.P - _center) / _radius, out rec.U, out rec.V);
                     return true;
                 }
             }
 
             rec.T = 0.0;
             rec.P = null;
+            rec.U = 0.0;
+            rec.V = 0.0;
             rec.Normal = null;
             rec.Material = null;
             return false;
@@ -68,6 +72,16 @@ namespace Raytracer.Geometry
             boundingBox = new AxisAlignedBoundingBox(_center - new Vec3(_radius, _radius, _radius),
                 _center + new Vec3(_radius, _radius, _radius));
             return true;
+        }
+
+        public static void GetSphereUV(Vec3 p, out double u, out double v)
+        {
+            double phi = Math.Atan2(p.Z(), p.X());
+            double theta = Math.Asin(p.Y());
+
+            u = 1 - (phi + Math.PI) / (2 * Math.PI);
+            v = (theta + Math.PI / 2) / Math.PI;
+            return;
         }
     }
 }

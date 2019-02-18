@@ -24,7 +24,7 @@ namespace Raytracer
 
                 if (depth < 50 && rec.Material.Scatter(r, rec, out attenuation, out scattered))
                 {
-                    return attenuation * Color(scattered, world, depth + 1);
+                        return attenuation * Color(scattered, world, depth + 1);
                 }
                 else
                 {
@@ -46,6 +46,18 @@ namespace Raytracer
 
             list.Add(new Sphere(new Vec3(0.0, -1000.0, 0), 1000, new Lambertian(perlin)));
             list.Add(new Sphere(new Vec3(0.0, 2.0, 0.0), 2, new Lambertian(perlin)));
+
+            return new HitableList(list);
+        }
+
+        public static HitableList EarthSphere()
+        {
+            Texture earth = new ImageTexture(Path.Combine("Images", "earth.jpeg"));
+            Texture color = new ConstantTexture(new Vec3(0.75, 0.75, 0.75));
+            List<Hitable> list = new List<Hitable>();
+
+            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0), 1000, new Lambertian(color)));
+            list.Add(new Sphere(new Vec3(0.0, 2.0, 0.0), 2, new Lambertian(earth)));
 
             return new HitableList(list);
         }
@@ -113,8 +125,7 @@ namespace Raytracer
             Console.WriteLine($"Antialiasing:\t{ns}");
             Console.WriteLine();
 
-            // BvhNode world = CreateRandomScene();
-            HitableList world = TwoPerlinSpheres();
+            HitableList world = EarthSphere();
 
             Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
             Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
