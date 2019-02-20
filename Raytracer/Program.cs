@@ -21,24 +21,56 @@ namespace Raytracer
             {
                 Ray scattered = new Ray();
                 Vec3 attenuation = new Vec3();
+                Vec3 emitted = rec.Material.emitted(rec.U, rec.V, rec.P);
 
                 if (depth < 50 && rec.Material.Scatter(r, rec, out attenuation, out scattered))
                 {
-                        return attenuation * Color(scattered, world, depth + 1);
+                    return emitted + attenuation * Color(scattered, world, depth + 1);
                 }
                 else
                 {
-                    return new Vec3(0.0, 0.0, 0.0);
+                    return emitted;
                 }
             }
             else
             {
-                Vec3 unitDirection = Vec3.UnitVector(r.Direction());
-                double t = 0.5 * (unitDirection.Y() + 1.0);
-                return (1.0 - t) * new Vec3(1.0, 1.0, 1.0) + t * new Vec3(0.5, 0.7, 1.0);
+                return new Vec3(0.0, 0.0, 0.0);
             }
         }
 
+
+        public static HitableList CornellBox()
+        {
+            var list = new List<Hitable>();
+            
+            Material red = new Lambertian(new ConstantTexture(new Vec3(0.65, 0.05, 0.05)));
+            Material white = new Lambertian(new ConstantTexture(new Vec3(0.73, 0.73, 0.73)));
+            Material green = new Lambertian(new ConstantTexture(new Vec3(0.12, 0.45, 0.15)));
+            Material light = new DiffuseLight(new ConstantTexture(new Vec3(15.0, 15.0, 15.0)));
+
+            list.Add(new FlipNormals(new YZRect(0, 555, 0, 555, 555, green)));
+            list.Add(new YZRect(0, 555, 0, 555, 0, red));
+            list.Add(new XZRect(213, 343, 227, 332, 554, light));
+            list.Add(new FlipNormals(new XZRect(0, 555, 0, 555, 555, white)));
+            list.Add(new XZRect(0, 555, 0, 555, 0, white));
+            list.Add(new FlipNormals(new XYRect(0, 555, 0, 555, 555, white)));
+
+            return new HitableList(list);
+        }
+
+        public static HitableList SimpleLight()
+        {
+            Texture per = new NoiseTexture(4.0);
+            var list = new List<Hitable>();
+
+            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0.0), 1000, new Lambertian(per)));
+            list.Add(new Sphere(new Vec3(0.0, 2.0, 0.0), 2.0, new Lambertian(per)));
+            list.Add(new Sphere(new Vec3(0.0, 7.0, 0.0), 2.0, new DiffuseLight(new ConstantTexture(new Vec3(4.0, 4.0, 4.0)))));
+            list.Add(new XYRect(3.0, 5.0, 1.0, 3.0, -2.0, new DiffuseLight(new ConstantTexture(new Vec3(4.0, 4.0, 4.0)))));
+
+            return new HitableList(list);
+        }
+        
         public static HitableList TwoPerlinSpheres()
         {
             Texture perlin = new NoiseTexture(5.0);
@@ -114,7 +146,7 @@ namespace Raytracer
 
             var nx = 1200;  // Horizontal resolution
             var ny = 800;   // Vertical resolution
-            var ns = 50;    // Antialising samples per pixel
+            var ns = 100;    // Antialising samples per pixel
 
             //var nx = 600;  // Horizontal resolution
             //var ny = 400;   // Vertical resolution
@@ -125,13 +157,21 @@ namespace Raytracer
             Console.WriteLine($"Antialiasing:\t{ns}");
             Console.WriteLine();
 
-            HitableList world = EarthSphere();
+            HitableList world = CornellBox();
 
-            Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
-            Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
+            // Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
+            // Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
+            // double distToFocus = 10.0;
+            // double aperture = 0.1;
+            // Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 35.0, (double)nx / (double)ny, aperture, distToFocus, 0.0, 1.0);
+
+            Vec3 lookfrom = new Vec3(278, 278, -800);
+            Vec3 lookat = new Vec3(278, 278, 0);
             double distToFocus = 10.0;
-            double aperture = 0.1;
-            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 20.0, (double)nx / (double)ny, aperture, distToFocus, 0.0, 1.0);
+            double aperture = 0.0;
+            double vFov = 40.0;
+
+            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), vFov, (double) nx / (double) ny, aperture, distToFocus, 0.0, 1.0);
 
             byte[] outputBytes = new byte[4 * nx * ny];
 
