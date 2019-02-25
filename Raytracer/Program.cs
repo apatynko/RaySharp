@@ -38,101 +38,6 @@ namespace Raytracer
             }
         }
 
-
-        public static HitableList CornellBox()
-        {
-            var list = new List<Hitable>();
-            
-            Material red = new Lambertian(new ConstantTexture(new Vec3(0.65, 0.05, 0.05)));
-            Material white = new Lambertian(new ConstantTexture(new Vec3(0.73, 0.73, 0.73)));
-            Material green = new Lambertian(new ConstantTexture(new Vec3(0.12, 0.45, 0.15)));
-            Material light = new DiffuseLight(new ConstantTexture(new Vec3(15.0, 15.0, 15.0)));
-
-            list.Add(new FlipNormals(new YZRect(0, 555, 0, 555, 555, green)));
-            list.Add(new YZRect(0, 555, 0, 555, 0, red));
-            list.Add(new XZRect(213, 343, 227, 332, 554, light));
-            list.Add(new FlipNormals(new XZRect(0, 555, 0, 555, 555, white)));
-            list.Add(new XZRect(0, 555, 0, 555, 0, white));
-            list.Add(new FlipNormals(new XYRect(0, 555, 0, 555, 555, white)));
-
-            return new HitableList(list);
-        }
-
-        public static HitableList SimpleLight()
-        {
-            Texture per = new NoiseTexture(4.0);
-            var list = new List<Hitable>();
-
-            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0.0), 1000, new Lambertian(per)));
-            list.Add(new Sphere(new Vec3(0.0, 2.0, 0.0), 2.0, new Lambertian(per)));
-            list.Add(new Sphere(new Vec3(0.0, 7.0, 0.0), 2.0, new DiffuseLight(new ConstantTexture(new Vec3(4.0, 4.0, 4.0)))));
-            list.Add(new XYRect(3.0, 5.0, 1.0, 3.0, -2.0, new DiffuseLight(new ConstantTexture(new Vec3(4.0, 4.0, 4.0)))));
-
-            return new HitableList(list);
-        }
-        
-        public static HitableList TwoPerlinSpheres()
-        {
-            Texture perlin = new NoiseTexture(5.0);
-            List<Hitable> list = new List<Hitable>();
-
-            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0), 1000, new Lambertian(perlin)));
-            list.Add(new Sphere(new Vec3(0.0, 2.0, 0.0), 2, new Lambertian(perlin)));
-
-            return new HitableList(list);
-        }
-
-        public static HitableList EarthSphere()
-        {
-            Texture earth = new ImageTexture(Path.Combine("Images", "earth.jpeg"));
-            Texture color = new ConstantTexture(new Vec3(0.75, 0.75, 0.75));
-            List<Hitable> list = new List<Hitable>();
-
-            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0), 1000, new Lambertian(color)));
-            list.Add(new Sphere(new Vec3(0.0, 2.0, 0.0), 2, new Lambertian(earth)));
-
-            return new HitableList(list);
-        }
-
-        public static BvhNode CreateRandomScene()
-        {
-            List<Hitable> list = new List<Hitable>();
-
-            var checker = new CheckerTexture(new ConstantTexture(new Vec3(0.2, 0.3, 0.1)), new ConstantTexture(new Vec3(0.9, 0.9, 0.9)));
-            list.Add(new Sphere(new Vec3(0.0, -1000.0, 0.0), 1000, new Lambertian(checker)));
-
-            for (int a = -11; a < 11; a++)
-            {
-                for (int b = -11; b < 11; b++)
-                {
-                    double chooseMaterial = FastRandom.RandomDouble();
-                    Vec3 center = new Vec3(a + 0.9 * FastRandom.RandomDouble(), 0.2, b + 0.9 * FastRandom.RandomDouble());
-
-                    if ((center-new Vec3(4.0,0.2,0.0)).Length() > 0.9)
-                    {
-                        if (chooseMaterial < 0.8) // diffuse
-                        {
-                            list.Add(new MovingSphere(center, center + new Vec3(0.0, 0.5 * FastRandom.RandomDouble(), 0.0), 0.0, 1.0, 0.2, new Lambertian(new ConstantTexture(new Vec3(FastRandom.RandomDouble() * FastRandom.RandomDouble(), FastRandom.RandomDouble() * FastRandom.RandomDouble(), (FastRandom.RandomDouble() * FastRandom.RandomDouble()))))));
-                        }
-                        else if (chooseMaterial < 0.95) // metal
-                        {
-                            list.Add(new Sphere(center, 0.2, new Metal(new Vec3(0.5*(1.0+ FastRandom.RandomDouble()), 0.5 * (1.0 + FastRandom.RandomDouble()), 0.5 * (1.0 + FastRandom.RandomDouble())), 0.5* FastRandom.RandomDouble())));
-                        }
-                        else // dielectric
-                        {
-                            list.Add(new Sphere(center, 0.2, new Dielectric(1.5)));
-                        }
-                    }
-                }
-            }
-
-            list.Add(new Sphere(new Vec3(0.0, 1.0, 0.0), 1.0, new Dielectric(1.5)));
-            list.Add(new Sphere(new Vec3(-4.0, 1.0, 0.0), 1.0, new Lambertian(new ConstantTexture(new Vec3(0.4, 0.2, 0.1)))));
-            list.Add(new Sphere(new Vec3(4.0, 1.0, 0.0), 1.0, new Metal(new Vec3(0.7, 0.6, 0.5), 0.0)));
-
-            return new BvhNode(list, 0.0, 1.0);
-        }
-
         static void Main(string[] args)
         {
             // Seed RNG
@@ -157,21 +62,15 @@ namespace Raytracer
             Console.WriteLine($"Antialiasing:\t{ns}");
             Console.WriteLine();
 
-            HitableList world = CornellBox();
+            var scene = new Scenes.CornellBox();
+            var world = scene.GetObjects();
+            var cam = scene.GetCamera((double) nx / (double) ny);
 
             // Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
             // Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
             // double distToFocus = 10.0;
             // double aperture = 0.1;
             // Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 35.0, (double)nx / (double)ny, aperture, distToFocus, 0.0, 1.0);
-
-            Vec3 lookfrom = new Vec3(278, 278, -800);
-            Vec3 lookat = new Vec3(278, 278, 0);
-            double distToFocus = 10.0;
-            double aperture = 0.0;
-            double vFov = 40.0;
-
-            Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), vFov, (double) nx / (double) ny, aperture, distToFocus, 0.0, 1.0);
 
             byte[] outputBytes = new byte[4 * nx * ny];
 
