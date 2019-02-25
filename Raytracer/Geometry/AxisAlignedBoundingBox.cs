@@ -87,16 +87,6 @@ namespace Raytracer.Geometry
                 return false;
             }
 
-            if (tzmin > tmin)
-            {
-                tmin = tzmin;
-            }
-
-            if (tzmax > tmax)
-            {
-                tmax = tzmax;
-            }
-
             return true;
         }
 
