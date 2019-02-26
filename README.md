@@ -35,7 +35,7 @@ The code after completing each chapter can be found in it's own commit.
 | 4       | Perlin Noise                          | [2b80f49](https://github.com/bschne/RaySharp/commit/2b80f492a9b528deb0ba488e3ff8047c562f502b) |
 | 5       | Image Texture Mapping                 | [6669473](https://github.com/bschne/RaySharp/commit/6669473b607d45caf2aff83159a46d73b534d548) |
 | 6       | Rectangles and Lights                 | [a129b05](https://github.com/bschne/RaySharp/commit/a129b050eae74b16abaf115a9cc2df62574042fb) |
-| 7       | Instances                             | PENDING                                  |
+| 7       | Instances                             | [765c175](https://github.com/bschne/RaySharp/commit/765c1751ac660f405d0d3e956c392c635b5787ed) |
 | 8       | Volumes                               | PENDING                                  |
 | 9       | A Scene Testing All New Features      | PENDING                                  |
 
