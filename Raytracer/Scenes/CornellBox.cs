@@ -29,6 +29,12 @@ namespace Raytracer.Scenes
             list.Add(new XZRect(0, 555, 0, 555, 0, white));
             list.Add(new FlipNormals(new XYRect(0, 555, 0, 555, 555, white)));
 
+
+            var box1 = new Box(new Vec3(0, 0, 0), new Vec3(165, 165, 165), white);
+            var box2 = new Box(new Vec3(0, 0, 0), new Vec3(165, 330, 165), white);
+            list.Add(new Translate(new RotateY(box1, -18), new Vec3(130, 0, 65)));
+            list.Add(new Translate(new RotateY(box2, 15), new Vec3(265, 0, 295)));
+
             return (Hitable) new HitableList(list);
         }
 

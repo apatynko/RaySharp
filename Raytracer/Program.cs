@@ -49,13 +49,9 @@ namespace Raytracer
                 : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
             var outputFileName = Path.Combine(new string[] { homePath, "output.jpg" });
 
-            var nx = 1200;  // Horizontal resolution
-            var ny = 800;   // Vertical resolution
-            var ns = 100;    // Antialising samples per pixel
-
-            //var nx = 600;  // Horizontal resolution
-            //var ny = 400;   // Vertical resolution
-            //var ns = 10;    // Antialising samples per pixel
+            var nx = 600;  // Horizontal resolution
+            var ny = 400;   // Vertical resolution
+            var ns = 150;    // Antialising samples per pixel
 
             Console.WriteLine($"Width:\t{nx}");
             Console.WriteLine($"Height:\t{ny}");
@@ -65,12 +61,6 @@ namespace Raytracer
             var scene = new Scenes.CornellBox();
             var world = scene.GetObjects();
             var cam = scene.GetCamera((double) nx / (double) ny);
-
-            // Vec3 lookfrom = new Vec3(13.0, 2.0, 3.0);
-            // Vec3 lookat = new Vec3(0.0, 0.0, 0.0);
-            // double distToFocus = 10.0;
-            // double aperture = 0.1;
-            // Camera cam = new Camera(lookfrom, lookat, new Vec3(0.0, 1.0, 0.0), 35.0, (double)nx / (double)ny, aperture, distToFocus, 0.0, 1.0);
 
             byte[] outputBytes = new byte[4 * nx * ny];
 
